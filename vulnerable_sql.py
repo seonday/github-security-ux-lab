@@ -1,14 +1,17 @@
-# vulnerable_sql.py
 import sqlite3
 
 def get_user(username):
-    conn = sqlite3.connect("users.db")
-
-    # 취약점: 사용자 입력을 직접 SQL에 삽입
-    query = f"SELECT * FROM users WHERE username = '{username}'"
-
-    cursor = conn.execute(query)
+    conn = sqlite3.connect('users.db')
+    cursor = conn.cursor()
+    # SQL injection: 사용자 입력이 쿼리에 직접 삽입됨
+    query = "SELECT * FROM users WHERE username = '" + username + "'"
+    cursor.execute(query)
     return cursor.fetchall()
 
+def main():
+    user_input = input("Enter username: ")
+    results = get_user(user_input)
+    print(results)
+
 if __name__ == "__main__":
-    print(get_user(input("Username: ")))
+    main()
