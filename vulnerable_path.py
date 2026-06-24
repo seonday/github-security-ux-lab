@@ -1,8 +1,16 @@
-# vulnerable_path.py
+import os
 
 def read_file(filename):
-    with open("uploads/" + filename, "r") as f:
+    # Path injection: 사용자 입력이 파일 경로에 직접 사용됨
+    base_dir = "/var/data/"
+    file_path = os.path.join(base_dir, filename)
+    with open(file_path, 'r') as f:
         return f.read()
 
-user_input = input("File: ")
-print(read_file(user_input))
+def main():
+    user_input = input("Enter filename: ")
+    content = read_file(user_input)
+    print(content)
+
+if __name__ == "__main__":
+    main()
